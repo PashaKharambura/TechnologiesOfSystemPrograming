@@ -1,11 +1,3 @@
-//
-//  SignUpPresenter.swift
-//  MSA
-//
-//  Created by Pavlo Kharambura on 2/22/18.
-//  Copyright © 2018 easyapps.solutions. All rights reserved.
-//
-
 import Foundation
 import UIKit
 import CoreData
