@@ -1,11 +1,3 @@
-//
-//  File.swift
-//  MSA
-//
-//  Created by Pavlo Kharambura on 2/21/18.
-//  Copyright © 2018 easyapps.solutions. All rights reserved.
-//
-
 import Foundation
 import Firebase
 
