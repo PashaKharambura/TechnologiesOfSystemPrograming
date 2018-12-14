@@ -59,3 +59,32 @@ class SetPurposeViewController: UIViewController {
     }
     
 }
+
+extension SetPurposeViewController: EditProfileProtocol {
+    
+    func purposeSetted() {
+        DispatchQueue.main.async {
+            self.presenter.setUser(user: AuthModule.currUser, context: self.context)
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
+    
+    func errorOcurred(_ error: String) {
+        DispatchQueue.main.async {
+            AlertDialog.showAlert("Ошибка", message: error, viewController: self)
+        }
+    }
+    
+    func startLoading() {
+        activityIndicator.startAnimating()
+    }
+    
+    func finishLoading() {
+        activityIndicator.stopAnimating()
+    }
+    
+    func setUser(user: UserVO) {}
+    func setNoUser() {}
+    func setAvatar(image: UIImage) {}
+    
+}
