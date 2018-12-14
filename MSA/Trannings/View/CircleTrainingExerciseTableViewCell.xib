@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Rubik-Bold.ttf">
+            <string>Rubik-Bold</string>
+        </array>
+        <array key="Rubik-Regular.ttf">
+            <string>Rubik-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CircleTrainingExerciseTableViewCell" rowHeight="295" id="KGk-i7-Jjw" customClass="CircleTrainingExerciseTableViewCell" customModule="MSA" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="318" height="295"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="318" height="294.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9hO-lz-lzC">
+                        <rect key="frame" x="0.0" y="0.0" width="318" height="284.5"/>
+                        <subviews>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HfE-Iu-59y">
+                                <rect key="frame" x="0.0" y="0.0" width="318" height="2"/>
+                                <color key="progressTintColor" red="0.015686274509803921" green="0.90980392156862744" blue="0.14117647058823529" alpha="1" colorSpace="calibratedRGB"/>
+                            </progressView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="HfE-Iu-59y" secondAttribute="trailing" id="9BB-qq-XTj"/>
+                            <constraint firstItem="HfE-Iu-59y" firstAttribute="leading" secondItem="9hO-lz-lzC" secondAttribute="leading" id="Yvp-lT-sS7"/>
+                            <constraint firstItem="HfE-Iu-59y" firstAttribute="top" secondItem="9hO-lz-lzC" secondAttribute="top" id="fg3-sV-6ry"/>
+                        </constraints>
+                    </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Жим от груди" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y5u-UO-PDx">
+                        <rect key="frame" x="15" y="5" width="288" height="26.5"/>
+                        <fontDescription key="fontDescription" name="Rubik-Bold" family="Rubik" pointSize="22"/>
+                        <color key="textColor" red="0.0" green="0.1843137255" blue="0.25098039220000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DTD-7h-H3J">
+                        <rect key="frame" x="50" y="41.5" width="218" height="197"/>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Подход #1 из N" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="4lL-Ln-RM5">
+                        <rect key="frame" x="16" y="252" width="112" height="19"/>
+                        <fontDescription key="fontDescription" name="Rubik-Regular" family="Rubik" pointSize="16"/>
+                        <color key="textColor" red="0.0" green="0.1843137255" blue="0.25098039220000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="cZe-dZ-DqE">
+                        <rect key="frame" x="133" y="248.5" width="170" height="26"/>
+                        <subviews>
+                            <button clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J7x-Ar-gCv">
+                                <rect key="frame" x="0.0" y="0.0" width="80" height="26"/>
+                                <color key="backgroundColor" red="0.01176470588" green="0.68627450980000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="Rubik-Bold" family="Rubik" pointSize="15"/>
+                                <state key="normal" title="0"/>
+                            </button>
+                            <button clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S2x-ce-QOO">
+                                <rect key="frame" x="90" y="0.0" width="80" height="26"/>
+                                <color key="backgroundColor" red="0.01176470588" green="0.68627450980000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="80" id="xJH-kf-HgY"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Rubik-Bold" family="Rubik" pointSize="15"/>
+                                <state key="normal" title="0"/>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="26" id="zTf-O5-M2I"/>
+                        </constraints>
+                    </stackView>
+                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CZI-OA-Aup">
+                        <rect key="frame" x="274" y="41.5" width="30" height="25"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="25" id="IIM-tM-wvB"/>
+                            <constraint firstAttribute="width" constant="30" id="wy5-dD-dlV"/>
+                        </constraints>
+                        <state key="normal" title="Button" image="roundtraining-active-32px"/>
+                    </button>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                <constraints>
+                    <constraint firstItem="9hO-lz-lzC" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="5bc-dr-tfx"/>
+                    <constraint firstItem="9hO-lz-lzC" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="9r8-tE-neW"/>
+                    <constraint firstAttribute="trailing" secondItem="cZe-dZ-DqE" secondAttribute="trailing" constant="15" id="DwL-vs-jnT"/>
+                    <constraint firstAttribute="bottom" secondItem="cZe-dZ-DqE" secondAttribute="bottom" constant="20" id="LnG-7p-vda"/>
+                    <constraint firstItem="DTD-7h-H3J" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="50" id="NSP-HJ-BHd"/>
+                    <constraint firstItem="cZe-dZ-DqE" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="4lL-Ln-RM5" secondAttribute="trailing" constant="5" id="OVo-1b-hvF"/>
+                    <constraint firstItem="DTD-7h-H3J" firstAttribute="top" secondItem="Y5u-UO-PDx" secondAttribute="bottom" constant="10" id="YvZ-Ep-mik"/>
+                    <constraint firstItem="Y5u-UO-PDx" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="aGX-r1-ATp"/>
+                    <constraint firstItem="cZe-dZ-DqE" firstAttribute="top" secondItem="DTD-7h-H3J" secondAttribute="bottom" constant="10" id="eg1-am-fCF"/>
+                    <constraint firstItem="CZI-OA-Aup" firstAttribute="top" secondItem="Y5u-UO-PDx" secondAttribute="bottom" constant="10" id="gJK-Z1-lcp"/>
+                    <constraint firstAttribute="trailing" secondItem="Y5u-UO-PDx" secondAttribute="trailing" constant="15" id="h93-Eb-PAC"/>
+                    <constraint firstItem="Y5u-UO-PDx" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="iAk-eC-L6f"/>
+                    <constraint firstAttribute="trailing" secondItem="DTD-7h-H3J" secondAttribute="trailing" constant="50" id="jPZ-th-tqC"/>
+                    <constraint firstItem="4lL-Ln-RM5" firstAttribute="centerY" secondItem="cZe-dZ-DqE" secondAttribute="centerY" id="kJL-Uo-2Yf"/>
+                    <constraint firstItem="4lL-Ln-RM5" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="li6-xp-eOb"/>
+                    <constraint firstAttribute="trailing" secondItem="9hO-lz-lzC" secondAttribute="trailing" id="nDi-1R-OC0"/>
+                    <constraint firstAttribute="bottom" secondItem="9hO-lz-lzC" secondAttribute="bottom" constant="10" id="uEG-nA-Hwm"/>
+                    <constraint firstItem="CZI-OA-Aup" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" constant="2" id="zC7-Sb-MoI"/>
+                </constraints>
+            </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="bgView" destination="9hO-lz-lzC" id="DCZ-aE-uko"/>
+                <outlet property="circleButton" destination="CZI-OA-Aup" id="gkP-jW-zhA"/>
+                <outlet property="counts" destination="S2x-ce-QOO" id="dXt-mg-jwQ"/>
+                <outlet property="kdButton" destination="J7x-Ar-gCv" id="Ydb-4d-obV"/>
+                <outlet property="nameLabel" destination="Y5u-UO-PDx" id="8Kv-Bm-Htu"/>
+                <outlet property="picture" destination="DTD-7h-H3J" id="Yxz-5g-dF1"/>
+                <outlet property="podhodCountLabel" destination="4lL-Ln-RM5" id="bbD-ay-YVi"/>
+                <outlet property="progressView" destination="HfE-Iu-59y" id="qrx-Aa-tRd"/>
+            </connections>
+            <point key="canvasLocation" x="40" y="201.5"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="roundtraining-active-32px" width="28" height="22"/>
+    </resources>
+</document>
