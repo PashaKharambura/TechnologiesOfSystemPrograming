@@ -60,3 +60,68 @@ class SignInViewController: BasicViewController, UIGestureRecognizerDelegate {
     }
 
 }
+
+extension SignInViewController: SignInViewProtocol {
+    
+    func goToMain() {
+        DispatchQueue.main.async {
+            let storyBoard = UIStoryboard(name: "Profile", bundle:nil)
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "tabBarVC") as! UITabBarController
+            self.show(nextViewController, sender: nil)
+            self.view.isUserInteractionEnabled = true
+        }
+    }
+    
+    func loggedWithFacebook() {
+        UserDataManager().getUser { (user) in
+            if user == nil {
+                DispatchQueue.main.async {
+                    let storyBoard = UIStoryboard(name: "Main", bundle:nil)
+                    let nextViewController = storyBoard.instantiateViewController(withIdentifier: "regSecond") as! NameSurnameViewController
+                    self.show(nextViewController, sender: nil)
+                }
+            } else {
+                self.setUser(user: user!)
+                self.logged()
+            }
+        }
+    }
+    
+    func logged() {
+        goToMain()
+    }
+    
+    func registrated() {
+        goToMain()
+    }
+    
+    func notRegistrated(resp: String) {
+        self.view.isUserInteractionEnabled = true
+        AlertDialog.showAlert("Ошибка регистрации", message: resp, viewController: self)
+    }
+    
+    func notLogged(resp: String) {
+        self.view.isUserInteractionEnabled = true
+        AlertDialog.showAlert("Ошибка авторизации", message: resp, viewController: self)
+    }
+    
+    func startLoading() {
+        self.view.isUserInteractionEnabled = false
+        blurView.alpha = 0.3
+        activityIndicator.startAnimating()
+    }
+    
+    func finishLoading() {
+        blurView.alpha = 0
+        activityIndicator.stopAnimating()
+    }
+    
+    func setUser(user: UserVO) {
+        presenter.setUser(user: user, context: context)
+    }
+    
+    func setNoUser() {
+        presenter.setNoUser()
+    }
+    
+}
