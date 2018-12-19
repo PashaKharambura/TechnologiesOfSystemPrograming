@@ -239,3 +239,150 @@ class ProfileViewController: BasicViewController, UIPopoverControllerDelegate, U
         navigationController?.navigationBar.isHidden = false
     }
 }
+
+extension ProfileViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if collectionView == relatedCollectionView {
+            return profilePresenter.iconsDataSource.count
+        }
+        return profilePresenter.gallery.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        if collectionView == relatedCollectionView {
+            let cell = relatedCollectionView.dequeueReusableCell(withReuseIdentifier: "RelatedUserCell", for: indexPath) as! RelatedUserCollectionViewCell
+            let imageUrl = profilePresenter.iconsDataSource[indexPath.row]
+            if let url = URL(string: imageUrl) {
+                cell.photoImageView.sd_setImage(with: url, completed: nil)
+            }
+            cell.typeImageView.image = profilePresenter.userType == .trainer ?  #imageLiteral(resourceName: "athlet-icon") : #imageLiteral(resourceName: "coach-icon")
+            return cell
+        }
+        
+        
+        let cell = galleryCollectionView.dequeueReusableCell(withReuseIdentifier: "galleryPhotoCell", for: indexPath) as! GalleryCollectionViewCell
+        let index = indexPath.row
+        cell.c.isHidden = true
+        cell.activityIndicator.startAnimating()
+        if let url = profilePresenter.gallery[index].imageUrl {
+            cell.photoImageView.sd_setImage(with: URL(string: url)!, placeholderImage: nil, options: .allowInvalidSSLCertificates, completed: { (img, err, cashe, url) in
+                cell.activityIndicator.stopAnimating()
+            })
+        }
+        if let video = profilePresenter.gallery[index].video_url, video != "" {
+            cell.video.alpha = 1
+        } else {
+            cell.video.alpha = 0
+        }
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if collectionView == relatedCollectionView {
+            return CGSize(width: 32, height: 32)
+        }
+        return CGSize(width: galleryCollectionView.frame.width/3-10, height: (galleryCollectionView.frame.width/3-3)*140/110);
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == relatedCollectionView { return }
+        
+        let index = indexPath.row
+        if let url = profilePresenter.gallery[index].video_url  {
+            playVideo(url: url)
+        } else {
+            if let url = profilePresenter.gallery[index].imageUrl {
+                UIView.animate(withDuration: 0.5) {
+                    self.imagePreviewView.alpha = 1
+                    self.tabBarController?.tabBar.isHidden = true
+                    if let imgUrl = URL(string: url) {
+                        self.previewImage.sd_setImage(with: imgUrl, placeholderImage: nil, options: .allowInvalidSSLCertificates, completed: nil)
+                    }
+                }
+            }
+            
+        }
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout:
+        UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return -18
+    }
+
+    
+    func openGallary() {
+        myPicker.allowsEditing = false
+        myPicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+        myPicker.mediaTypes = ["public.image", "public.movie"]
+        present(myPicker, animated: true, completion: nil)
+    }
+    
+    func openCamera() {
+        myPicker.allowsEditing = false
+        myPicker.sourceType = UIImagePickerControllerSourceType.camera
+        myPicker.mediaTypes = ["public.image", "public.movie"]
+        present(myPicker, animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func playVideo(url: String) {
+        if let VideoURL = URL(string: url) {
+            let player = AVPlayer(url: VideoURL)
+            let playerViewController = AVPlayerViewController()
+            playerViewController.player = player
+            self.present(playerViewController, animated: true) {
+                playerViewController.player!.play()
+            }
+        }
+    }
+}
+
+//extension ProfileViewController: GalleryDataProtocol {
+//
+//    func videoLoaded(url: String, and img: UIImage) {
+////        presenter.setCurrentVideoUrl(url: url)
+////        presenter.uploadPhoto(image: img)
+//    }
+//
+//    func errorOccurred(err: String) {
+//
+//    }
+//
+//    func photoUploaded() {
+//       // presenter.addItem(item: presenter.getCurrentItem())
+//    }
+//
+//    func startLoading() {
+//        DispatchQueue.main.async {
+//            self.activityIndicator.startAnimating()
+//        }
+//    }
+//
+//    func finishLoading() {
+//        DispatchQueue.main.async {
+//            self.activityIndicator.stopAnimating()
+//        }
+//    }
+//
+//    func galleryLoaded() {
+//        DispatchQueue.main.async {
+////            self.galleryPresenter.updateGalleryItems(items: self.presenter.getItems())
+////            self.galleryPresenter.deleteGalleryBlock(context: self.context)
+////            self.galleryPresenter.saveGallery(context: self.context)
+////            self.galleryCollectionView.reloadData()
+////            self.galleryPresenter.clear()
+////            self.activityIndicator.stopAnimating()
+////            self.galleryPresenter.clear()
+//        }
+//    }
+//
+//    func openImage(image: UIImage) {
+//
+//    }
+//
+//}
+
