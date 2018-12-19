@@ -1,0 +1,241 @@
+import UIKit
+import AVKit
+import AVFoundation
+import SDWebImage
+import SVProgressHUD
+
+protocol ProfileViewProtocol: class {
+    func updateProfile(with user: UserVO)
+    func configureViewBasedOnState(state: PersonState)
+    func reloadIconsCollectionView()
+    func showDeleteAlert(for user: UserVO)
+    func dismiss()
+    func showAddAlertFor(user: UserVO, isTrainerEnabled: Bool)
+}
+
+class ProfileViewController: BasicViewController, UIPopoverControllerDelegate, UINavigationControllerDelegate, ProfileViewProtocol {
+    
+    @IBOutlet weak var profileView: UIView!
+    @IBOutlet weak var buttViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var imagePreviewView: UIView!
+    @IBOutlet weak var previewImage: UIImageView!
+    @IBOutlet weak var containerViewHeightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var viewWithButtons: UIView!
+    @IBOutlet weak var scrollView: UIView!
+    
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!{didSet{activityIndicator.stopAnimating()}}
+    @IBOutlet weak var galleryCollectionView: UICollectionView!
+    @IBOutlet weak var galleryView: UIView! {didSet{galleryView.layer.cornerRadius = 12}}
+    @IBOutlet weak var profileViewbg: UIView! {didSet{profileViewbg.layer.cornerRadius = 10}}
+    @IBOutlet weak var userImage: UIView!
+    
+    @IBOutlet weak var relatedCollectionView: UICollectionView!
+    @IBOutlet weak var relatedWidthConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var userName: UILabel!
+    @IBOutlet weak var userLevel: UILabel!
+    @IBOutlet weak var dailyTraining: UILabel!
+    @IBOutlet weak var dreamInsideView: UIView! {
+        didSet {dreamInsideView.layer.cornerRadius = 12
+            dreamInsideView.layer.borderColor = UIColor.msaBlack.withAlphaComponent(0.1).cgColor
+            dreamInsideView.layer.borderWidth = 2
+        }
+        
+    }
+    
+    var profilePresenter: ProfilePresenterProtocol!
+    
+    var customImageViev = ProfileImageView()
+    var myPicker = UIImagePickerController()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        relatedCollectionView.dataSource = self
+        relatedCollectionView.delegate = self
+        relatedWidthConstraint.constant = CGFloat((profilePresenter.iconsDataSource.count - 1) * 12 + 32)
+        configureButtonsView()
+        profilePresenter.start()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        configureProfileView()
+        setNavigationBarTransparent()
+        self.tabBarController?.tabBar.isHidden = false
+        
+        
+        //navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+    
+    private func setNavigationBarTransparent() {
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.isTranslucent = true
+        self.navigationController?.navigationBar.backgroundColor = .clear
+        self.navigationController?.view.backgroundColor = .clear
+    }
+    
+    
+    func configureButtonsView() {
+        let w = CGFloat(self.view.frame.width - 32.0)
+        buttViewHeight.constant = CGFloat(20.0 + (w*111.0/164.0))
+    }
+    
+    func setShadow(outerView: UIView, shadowOpacity: Float) {
+        outerView.clipsToBounds = false
+        outerView.layer.shadowColor = UIColor.black.cgColor
+        outerView.layer.shadowOpacity = shadowOpacity
+        outerView.layer.shadowOffset = CGSize.zero
+        outerView.layer.shadowRadius = 10
+        outerView.layer.shadowPath = UIBezierPath(roundedRect: outerView.bounds, cornerRadius: 10).cgPath
+    }
+    
+    func configureProfileView() {
+        setShadow(outerView: profileView, shadowOpacity: 0.3)
+        setShadow(outerView: viewWithButtons, shadowOpacity: 0.2)
+    }
+    
+    func configureViewBasedOnState(state: PersonState) {
+        SVProgressHUD.dismiss()
+        if state != .trainersSportsman {
+            containerViewHeightConstraint.constant -= viewWithButtons.frame.height
+            buttViewHeight.constant = 0
+        }
+        if state == .all {
+            navigationItem.rightBarButtonItem?.tintColor = .lightBlue
+            navigationItem.rightBarButtonItem?.image = #imageLiteral(resourceName: "plus_blue")
+        } else {
+            navigationItem.rightBarButtonItem?.tintColor = .red
+            navigationItem.rightBarButtonItem?.image = #imageLiteral(resourceName: "delete_red")
+        }
+    }
+    
+    func updateProfile(with user: UserVO) {
+        if let name = user.firstName, let surname = user.lastName {
+            userName.text = name + " " + surname
+        }
+        if let level = user.level {
+            userLevel.text = level
+        }
+        if let dream = user.purpose {
+            dailyTraining.text = dream
+        }
+        setProfileImage(image: nil, url: user.avatar)
+          if  user.userType == .trainer {
+            
+        }
+    }
+    
+    func setProfileImage(image: UIImage?, url: String?) {
+        for view in userImage.subviews {
+            view.removeFromSuperview()
+        }
+        let indicator = UIActivityIndicatorView()
+        indicator.center = userImage.center
+        indicator.startAnimating()
+        indicator.activityIndicatorViewStyle = .white
+        indicator.color = .blue
+        userImage.addSubview(indicator)
+        
+        customImageViev.image = nil
+        if let url = url {
+            customImageViev.sd_setImage(with: URL(string: url), placeholderImage: nil, options: .allowInvalidSSLCertificates, completed: nil)
+        } else {
+            customImageViev.image = #imageLiteral(resourceName: "avatarPlaceholder")
+        }
+        if let image = image {
+            customImageViev.image = image
+        }
+        customImageViev.frame = CGRect(x: 0, y: 0, width: 96, height: 120)
+        customImageViev.contentMode = .scaleAspectFill
+        customImageViev.setNeedsLayout()
+        userImage.addSubview(customImageViev)
+        
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 70, height: 90))
+        button.backgroundColor = .clear
+        button.addTarget(self, action: #selector(openAvatar), for: .touchUpInside)
+        self.userImage.addSubview(button)
+    }
+    
+    @objc func openAvatar(sender: UIButton!) {
+        if let avatar = profilePresenter.avatar {
+            UIView.animate(withDuration: 0.5) { [weak self] in
+                self?.imagePreviewView.alpha = 1
+                self?.tabBarController?.tabBar.isHidden = true
+                self?.navigationController?.navigationBar.isHidden = true
+                if let imgUrl = URL(string: avatar) {
+                    self?.previewImage.sd_setImage(with: imgUrl, placeholderImage: nil, options: .allowInvalidSSLCertificates, completed: nil)
+                }
+            }
+        }
+    }
+    
+    func showDeleteAlert(for user: UserVO) {
+        let alert = UIAlertController(title: nil, message: "Вы дейсвительно хотите удалить из запросов/друзей/спортсменов? ", preferredStyle: .actionSheet)
+        let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+            SVProgressHUD.show()
+            self?.profilePresenter.deleteAction(for: user)
+        }
+        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+        alert.addAction(deleteAction)
+        alert.addAction(cancelAction)
+        present(alert, animated: true)
+    }
+    
+    func showAddAlertFor(user: UserVO, isTrainerEnabled: Bool) {
+        let alert = UIAlertController(title: "Добавить в свое сообщество \(user.getFullName())", message: "Вы можете перейти на страницу тренера/друга на вкладке “Сообщество”", preferredStyle: .alert)
+        let cancelActionButton = UIAlertAction(title: "Отмена", style: .cancel) { action -> Void in
+            print("Cancel")
+        }
+        let addFriendAction = UIAlertAction(title: "Добавить в список друзей", style: .default, handler: { [weak self] action -> Void in
+            SVProgressHUD.show()
+            self?.profilePresenter.addToFriends(user: user)
+            
+        })
+        alert.addAction(cancelActionButton)
+        alert.addAction(addFriendAction)
+        if isTrainerEnabled {
+            let addTrainerAction = UIAlertAction(title: "Добавить в тренеры", style: .default, handler: { [weak self] _ in
+                SVProgressHUD.show()
+                self?.profilePresenter.addAsTrainer(user: user)
+            })
+            alert.addAction(addTrainerAction)
+        }
+        self.present(alert, animated: true)
+    }
+    
+    func dismiss() {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    func reloadIconsCollectionView() {
+        // MARK: use for future refactoring
+        //relatedCollectionView.reloadData()
+    }
+    
+    @IBAction func rightBarButtonTapped(_ sender: Any) {
+        profilePresenter.addOrRemoveUserAction()
+    }
+    
+    
+    @IBAction func statisticButton(_ sender: Any) {
+    }
+    @IBAction func infoWeightHeightEct(_ sender: Any) {
+    }
+    @IBAction func foodButton(_ sender: Any) {
+    }
+    @IBAction func traningsButton(_ sender: Any) {
+        let destinationVC = UIStoryboard(name: "Trannings", bundle: nil).instantiateViewController(withIdentifier: "MyTranningsViewController") as! MyTranningsViewController
+        destinationVC.manager.trainingType = .notMine(userId: profilePresenter.userId)
+        self.navigationController?.pushViewController(destinationVC, animated: true)
+    }
+    
+    @IBAction func closePreview(_ sender: Any) {
+        UIView.animate(withDuration: 0.5) { [weak self] in
+            self?.imagePreviewView.alpha = 0
+            self?.previewImage.image = nil
+            self?.tabBarController?.tabBar.isHidden = false
+        }
+        navigationController?.navigationBar.isHidden = false
+    }
+}
